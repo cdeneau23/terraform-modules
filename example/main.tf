@@ -26,6 +26,18 @@ module "network" {
   environment = "dev"
 }
 
+module "cluster" {
+  depends_on = [
+    module.network
+  ]
+  source = "../modules/ecs"
+  cluster_name = "two-dogs-ecs-example-cluster"
+  app_name = "two-dogs-ecs-example"
+  environment = "dev"
+  vpc_id = module.network.vpc_id
+  public_security_groups = module.network.public_subnets_id
+}
+
 terraform {
  backend "s3" {
    bucket         = "state-two-dogs-ecs-example"
